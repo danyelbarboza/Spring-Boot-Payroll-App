@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "funcionarios")
-public class Employee {
+public class Funcionarios {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +30,10 @@ public class Employee {
     private Double grossSalary;
 
     //constructors
-    public Employee() {
+    public Funcionarios() {
     }
 
-    public Employee(Integer id, String name, String cpf, String position, Double grossSalary) {
+    public Funcionarios(Integer id, String name, String cpf, String position, Double grossSalary) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
