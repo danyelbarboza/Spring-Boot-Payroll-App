@@ -44,7 +44,6 @@ public class ContraCheque {
             }
         }
 
-        // Chamar a CalculadoraSalario para INSS e IRRF
         double inss = calculadoraSalario.calcularINSS(salarioBruto);
         double irrf = calculadoraSalario.calcularIRRF(salarioBruto, inss);
 
@@ -53,5 +52,4 @@ public class ContraCheque {
         return salarioLiquido;
     }
 
-    // Outros métodos relacionados à folha de pagamento
 }
