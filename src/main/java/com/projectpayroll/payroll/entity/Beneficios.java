@@ -23,4 +23,50 @@ public class Beneficios {
 
     @Column(name = "eh_desconto")
     private Boolean isDiscount;
+
+    //constructors
+    public Beneficios() {
+    }
+    
+    public Beneficios(Integer id, String name, Double defaultValue, Boolean isDiscount) {
+        this.id = id;
+        this.name = name;
+        this.defaultValue = defaultValue;
+        this.isDiscount = isDiscount;
+    }
+
+    //getters and setters
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Double getDefaultValue() {
+        return defaultValue;
+    }
+
+    public Boolean getIsDiscount() {
+        return isDiscount;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDefaultValue(Double defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public void setIsDiscount(Boolean isDiscount) {
+        this.isDiscount = isDiscount;
+    }
+
 }

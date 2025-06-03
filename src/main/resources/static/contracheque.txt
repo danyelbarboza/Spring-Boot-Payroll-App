@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contracheque</title>
+    <style>
+        /* Estilos CSS para o Contracheque */
+        body {
+            font-family: 'Arial', sans-serif; /* Define a fonte padrão */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Cor de fundo da página (para visualização) */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha o contracheque no topo */
+            min-height: 100vh; /* Garante que o fundo cubra a tela inteira */
+        }
+
+        .payslip-container {
+            width: 800px; /* Largura do contracheque */
+            background-color: #fff; /* Cor de fundo do contracheque */
+            margin: 20px; /* Margem ao redor do contracheque */
+            padding: 25px; /* Espaçamento interno */
+            border: 1px solid #ccc; /* Borda sutil */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
+            font-size: 12px; /* Tamanho da fonte base */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333; /* Linha separadora */
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px; /* Tamanho do título principal */
+            color: #333;
+        }
+
+        .header p {
+            margin: 5px 0;
+            font-size: 10px; /* Tamanho da fonte para informações da empresa */
+            color: #555;
+        }
+
+        .company-info, .employee-info {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #eee; /* Borda para seções de informação */
+            border-radius: 4px; /* Cantos arredondados */
+        }
+
+        .company-info h2, .employee-info h2, .section-title {
+            font-size: 14px; /* Tamanho dos subtítulos */
+            color: #444;
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee; /* Linha separadora sutil */
+            padding-bottom: 4px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Layout responsivo em grade */
+            gap: 10px; /* Espaçamento entre os itens da grade */
+        }
+
+        .info-item {
+            margin-bottom: 5px;
+        }
+
+        .info-item strong {
+            display: inline-block;
+            width: 120px; /* Largura fixa para os rótulos */
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Remove espaços entre as bordas das células */
+            margin-bottom: 20px;
+            font-size: 11px; /* Tamanho da fonte da tabela */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* Bordas das células */
+            padding: 8px; /* Espaçamento interno das células */
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0; /* Cor de fundo do cabeçalho da tabela */
+            font-weight: bold;
+            color: #333;
+        }
+
+        .text-right {
+            text-align: right; /* Alinha o texto à direita */
+        }
+
+        .text-center {
+            text-align: center; /* Alinha o texto ao centro */
+        }
+
+        .totals-section {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc; /* Linha separadora para os totais */
+        }
+
+        .totals-section table {
+            width: 50%; /* Largura da tabela de totais */
+            margin-left: auto; /* Alinha a tabela de totais à direita */
+            font-size: 12px;
+        }
+
+        .totals-section td {
+            border: none; /* Remove bordas da tabela de totais */
+            padding: 5px 8px;
+        }
+
+        .totals-section .total-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 10px;
+            color: #777;
+        }
+
+        .footer .signature-area {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-around; /* Espaça as áreas de assinatura */
+        }
+
+        .footer .signature-line {
+            border-top: 1px solid #555;
+            width: 250px; /* Largura da linha de assinatura */
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        .message-section {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #eef; /* Fundo para a seção de mensagens */
+            border: 1px solid #cce;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payslip-container">
+        <header class="header">
+            <h1>DEMONSTRATIVO DE PAGAMENTO</h1>
+            <p>Nome da Empresa Exemplo LTDA.</p>
+            <p>CNPJ: 00.000.000/0001-00</p>
+            <p>Endereço da Empresa, 123 - Cidade, Estado - CEP: 00000-000</p>
+        </header>
+
+        <section class="company-info">
+            <h2>Informações Gerais</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Período de Referência:</strong> <span>Maio/2024</span></div>
+                <div class="info-item"><strong>Data de Pagamento:</strong> <span>05/06/2024</span></div>
+                <div class="info-item"><strong>Filial:</strong> <span>Matriz</span></div>
+            </div>
+        </section>
+
+        <section class="employee-info">
+            <h2>Dados do Funcionário</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Nome:</strong> <span>João da Silva Sauro</span></div>
+                <div class="info-item"><strong>Matrícula:</strong> <span>12345</span></div>
+                <div class="info-item"><strong>CPF:</strong> <span>123.456.789-00</span></div>
+                <div class="info-item"><strong>Cargo:</strong> <span>Desenvolvedor Pleno</span></div>
+                <div class="info-item"><strong>Departamento:</strong> <span>Tecnologia</span></div>
+                <div class="info-item"><strong>Data de Admissão:</strong> <span>01/01/2022</span></div>
+                <div class="info-item"><strong>Banco:</strong> <span>Banco Exemplo S.A.</span></div>
+                <div class="info-item"><strong>Agência:</strong> <span>0001</span></div>
+                <div class="info-item"><strong>Conta Corrente:</strong> <span>12345-6</span></div>
+            </div>
+        </section>
+
+        <h2 class="section-title">Vencimentos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Referência</th>
+                    <th class="text-right">Proventos (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>101</td>
+                    <td>Salário Base</td>
+                    <td>30 dias</td>
+                    <td class="text-right">5.000,00</td>
+                </tr>
+                <tr>
+                    <td>105</td>
+                    <td>Horas Extras 50%</td>
+                    <td>10 hrs</td>
+                    <td class="text-right">350,75</td>
+                </tr>
+                <tr>
+                    <td>110</td>
+                    <td>Adicional Noturno</td>
+                    <td>-</td>
+                    <td class="text-right">150,00</td>
+                </tr>
+                </tbody>
+        </table>
+
+        <h2 class="section-title">Descontos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Referência</th>
+                    <th class="text-right">Descontos (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>201</td>
+                    <td>INSS</td>
+                    <td>12%</td>
+                    <td class="text-right">600,00</td>
+                </tr>
+                <tr>
+                    <td>202</td>
+                    <td>IRRF</td>
+                    <td>7.5%</td>
+                    <td class="text-right">250,00</td>
+                </tr>
+                <tr>
+                    <td>205</td>
+                    <td>Vale Transporte</td>
+                    <td>6%</td>
+                    <td class="text-right">300,00</td>
+                </tr>
+                <tr>
+                    <td>208</td>
+                    <td>Plano de Saúde</td>
+                    <td>-</td>
+                    <td class="text-right">180,50</td>
+                </tr>
+                </tbody>
+        </table>
+
+        <section class="totals-section">
+            <table>
+                <tr>
+                    <td class="total-label">Total de Vencimentos:</td>
+                    <td class="text-right">5.500,75</td>
+                </tr>
+                <tr>
+                    <td class="total-label">Total de Descontos:</td>
+                    <td class="text-right">1.330,50</td>
+                </tr>
+                <tr>
+                    <td class="total-label" style="font-size: 14px;">Valor Líquido a Receber:</td>
+                    <td class="text-right" style="font-weight: bold; font-size: 14px;">4.170,25</td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="employee-info" style="margin-top: 20px;">
+            <h2>Bases de Cálculo</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Salário Base (CLT):</strong> <span>R$ 5.000,00</span></div>
+                <div class="info-item"><strong>Base INSS:</strong> <span>R$ 5.000,00</span></div>
+                <div class="info-item"><strong>Base FGTS:</strong> <span>R$ 5.500,75</span></div>
+                <div class="info-item"><strong>FGTS do Mês:</strong> <span>R$ 440,06</span></div>
+                <div class="info-item"><strong>Base IRRF:</strong> <span>R$ 3.410,25</span></div>
+                <div class="info-item"><strong>Faixa IRRF:</strong> <span>7.5%</span></div>
+            </div>
+        </section>
+
+        <section class="message-section">
+            <strong>Mensagens:</strong>
+            <p>- O pagamento será creditado na conta informada até o 5º dia útil.</p>
+            <p>- Férias programadas para: 01/07/2024 a 30/07/2024.</p>
+        </section>
+
+        <footer class="footer">
+            <p class="text-center">Local e Data: Cidade Exemplo, 05 de Junho de 2024</p>
+            <div class="signature-area">
+                <div class="signature-line">Assinatura do Empregador</div>
+                <div class="signature-line">Assinatura do Empregado</div>
+            </div>
+            <p style="margin-top: 20px; text-align: center;">
+                Declaro ter recebido a importância líquida discriminada neste recibo.
+            </p>
+        </footer>
+
+    </div>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contracheque</title>
+    <style>
+        /* Estilos CSS para o Contracheque */
+        body {
+            font-family: 'Arial', sans-serif; /* Define a fonte padrão */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4; /* Cor de fundo da página (para visualização) */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha o contracheque no topo */
+            min-height: 100vh; /* Garante que o fundo cubra a tela inteira */
+        }
+
+        .payslip-container {
+            width: 800px; /* Largura do contracheque */
+            background-color: #fff; /* Cor de fundo do contracheque */
+            margin: 20px; /* Margem ao redor do contracheque */
+            padding: 25px; /* Espaçamento interno */
+            border: 1px solid #ccc; /* Borda sutil */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidade */
+            font-size: 12px; /* Tamanho da fonte base */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333; /* Linha separadora */
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px; /* Tamanho do título principal */
+            color: #333;
+        }
+
+        .header p {
+            margin: 5px 0;
+            font-size: 10px; /* Tamanho da fonte para informações da empresa */
+            color: #555;
+        }
+
+        .company-info, .employee-info {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #eee; /* Borda para seções de informação */
+            border-radius: 4px; /* Cantos arredondados */
+        }
+
+        .company-info h2, .employee-info h2, .section-title {
+            font-size: 14px; /* Tamanho dos subtítulos */
+            color: #444;
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee; /* Linha separadora sutil */
+            padding-bottom: 4px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Layout responsivo em grade */
+            gap: 10px; /* Espaçamento entre os itens da grade */
+        }
+
+        .info-item {
+            margin-bottom: 5px;
+        }
+
+        .info-item strong {
+            display: inline-block;
+            width: 120px; /* Largura fixa para os rótulos */
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse; /* Remove espaços entre as bordas das células */
+            margin-bottom: 20px;
+            font-size: 11px; /* Tamanho da fonte da tabela */
+        }
+
+        th, td {
+            border: 1px solid #ddd; /* Bordas das células */
+            padding: 8px; /* Espaçamento interno das células */
+            text-align: left;
+        }
+
+        th {
+            background-color: #f0f0f0; /* Cor de fundo do cabeçalho da tabela */
+            font-weight: bold;
+            color: #333;
+        }
+
+        .text-right {
+            text-align: right; /* Alinha o texto à direita */
+        }
+
+        .text-center {
+            text-align: center; /* Alinha o texto ao centro */
+        }
+
+        .totals-section {
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #ccc; /* Linha separadora para os totais */
+        }
+
+        .totals-section table {
+            width: 50%; /* Largura da tabela de totais */
+            margin-left: auto; /* Alinha a tabela de totais à direita */
+            font-size: 12px;
+        }
+
+        .totals-section td {
+            border: none; /* Remove bordas da tabela de totais */
+            padding: 5px 8px;
+        }
+
+        .totals-section .total-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 10px;
+            color: #777;
+        }
+
+        .footer .signature-area {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-around; /* Espaça as áreas de assinatura */
+        }
+
+        .footer .signature-line {
+            border-top: 1px solid #555;
+            width: 250px; /* Largura da linha de assinatura */
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        .message-section {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #eef; /* Fundo para a seção de mensagens */
+            border: 1px solid #cce;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="payslip-container">
+        <header class="header">
+            <h1>DEMONSTRATIVO DE PAGAMENTO</h1>
+            <p>Nome da Empresa Exemplo LTDA.</p>
+            <p>CNPJ: 00.000.000/0001-00</p>
+            <p>Endereço da Empresa, 123 - Cidade, Estado - CEP: 00000-000</p>
+        </header>
+
+        <section class="company-info">
+            <h2>Informações Gerais</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Período de Referência:</strong> <span>Maio/2024</span></div>
+                <div class="info-item"><strong>Data de Pagamento:</strong> <span>05/06/2024</span></div>
+                <div class="info-item"><strong>Filial:</strong> <span>Matriz</span></div>
+            </div>
+        </section>
+
+        <section class="employee-info">
+            <h2>Dados do Funcionário</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Nome:</strong> <span>João da Silva Sauro</span></div>
+                <div class="info-item"><strong>Matrícula:</strong> <span>12345</span></div>
+                <div class="info-item"><strong>CPF:</strong> <span>123.456.789-00</span></div>
+                <div class="info-item"><strong>Cargo:</strong> <span>Desenvolvedor Pleno</span></div>
+                <div class="info-item"><strong>Departamento:</strong> <span>Tecnologia</span></div>
+                <div class="info-item"><strong>Data de Admissão:</strong> <span>01/01/2022</span></div>
+                <div class="info-item"><strong>Banco:</strong> <span>Banco Exemplo S.A.</span></div>
+                <div class="info-item"><strong>Agência:</strong> <span>0001</span></div>
+                <div class="info-item"><strong>Conta Corrente:</strong> <span>12345-6</span></div>
+            </div>
+        </section>
+
+        <h2 class="section-title">Vencimentos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Referência</th>
+                    <th class="text-right">Proventos (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>101</td>
+                    <td>Salário Base</td>
+                    <td>30 dias</td>
+                    <td class="text-right">5.000,00</td>
+                </tr>
+                <tr>
+                    <td>105</td>
+                    <td>Horas Extras 50%</td>
+                    <td>10 hrs</td>
+                    <td class="text-right">350,75</td>
+                </tr>
+                <tr>
+                    <td>110</td>
+                    <td>Adicional Noturno</td>
+                    <td>-</td>
+                    <td class="text-right">150,00</td>
+                </tr>
+                </tbody>
+        </table>
+
+        <h2 class="section-title">Benefícios</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Referência</th>
+                    <th class="text-right">Valor (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>301</td>
+                    <td>Vale Refeição</td>
+                    <td>22 dias</td>
+                    <td class="text-right">440,00</td>
+                </tr>
+                <tr>
+                    <td>302</td>
+                    <td>Vale Alimentação</td>
+                    <td>Mês</td>
+                    <td class="text-right">300,00</td>
+                </tr>
+                <tr>
+                    <td>305</td>
+                    <td>Assistência Médica (Empresa)</td>
+                    <td>-</td>
+                    <td class="text-right">250,00</td> </tr>
+                </tbody>
+        </table>
+
+        <h2 class="section-title">Descontos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição</th>
+                    <th>Referência</th>
+                    <th class="text-right">Descontos (R$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>201</td>
+                    <td>INSS</td>
+                    <td>12%</td> <td class="text-right">600,00</td> </tr>
+                <tr>
+                    <td>202</td>
+                    <td>IRRF</td>
+                    <td>7.5%</td> <td class="text-right">250,00</td> </tr>
+                <tr>
+                    <td>205</td>
+                    <td>Vale Transporte</td>
+                    <td>6%</td>
+                    <td class="text-right">300,00</td> </tr>
+                <tr>
+                    <td>208</td>
+                    <td>Plano de Saúde (Funcionário)</td>
+                    <td>-</td>
+                    <td class="text-right">180,50</td>
+                </tr>
+                 <tr>
+                    <td>210</td>
+                    <td>Vale Refeição (Participação Func.)</td>
+                    <td>-</td>
+                    <td class="text-right">44,00</td> </tr>
+                </tbody>
+        </table>
+
+        <section class="totals-section">
+            <table>
+                <tr>
+                    <td class="total-label">Total de Vencimentos:</td>
+                    <td class="text-right">5.500,75</td>
+                </tr>
+                <tr>
+                    <td class="total-label">Total de Benefícios (Creditados):</td>
+                    <td class="text-right">740,00</td> </tr>
+                <tr>
+                    <td class="total-label">Total de Descontos:</td>
+                    <td class="text-right">1.374,50</td> </tr>
+                <tr>
+                    <td class="total-label" style="font-size: 14px;">Valor Líquido a Receber:</td>
+                    <td class="text-right" style="font-weight: bold; font-size: 14px;">4.866,25</td> </tr>
+            </table>
+        </section>
+
+        <section class="employee-info" style="margin-top: 20px;">
+            <h2>Bases de Cálculo</h2>
+            <div class="info-grid">
+                <div class="info-item"><strong>Salário Base (CLT):</strong> <span>R$ 5.000,00</span></div>
+                <div class="info-item"><strong>Base INSS:</strong> <span>R$ 5.000,00</span></div> <div class="info-item"><strong>Base FGTS:</strong> <span>R$ 5.500,75</span></div> <div class="info-item"><strong>FGTS do Mês:</strong> <span>R$ 440,06</span></div> <div class="info-item"><strong>Base IRRF:</strong> <span>R$ 3.366,25</span></div> <div class="info-item"><strong>Faixa IRRF:</strong> <span>7.5%</span></div> </div>
+        </section>
+
+        <section class="message-section">
+            <strong>Mensagens:</strong>
+            <p>- O pagamento do salário líquido será creditado na conta bancária informada.</p>
+            <p>- Os valores referentes a Vale Refeição e Vale Alimentação são creditados em cartão benefício específico.</p>
+            <p>- Férias programadas para: 01/07/2024 a 30/07/2024.</p>
+        </section>
+
+        <footer class="footer">
+            <p class="text-center">Local e Data: Cidade Exemplo, 05 de Junho de 2024</p>
+            <div class="signature-area">
+                <div class="signature-line">Assinatura do Empregador</div>
+                <div class="signature-line">Assinatura do Empregado</div>
+            </div>
+            <p style="margin-top: 20px; text-align: center;">
+                Declaro ter recebido a importância líquida discriminada neste recibo, bem como os valores referentes aos benefícios informados.
+            </p>
+        </footer>
+
+    </div>
+</body>
+</html>

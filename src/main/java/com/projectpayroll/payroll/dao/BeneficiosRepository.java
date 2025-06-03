@@ -5,7 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.projectpayroll.payroll.entity.Beneficios;
 
-@RepositoryRestResource(path = "members")
+@RepositoryRestResource(path = "beneficios")
 public interface BeneficiosRepository extends JpaRepository<Beneficios, Integer> {
     
 }
