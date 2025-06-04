@@ -20,7 +20,7 @@ public class ContraCheque {
     private Integer funcionarioId;
     
     @Column(name = "salario_bruto")
-    private Double grossSalary;
+    private Double salarioBruto;
     
     @Column(name = "inss")
     private Double inss;
@@ -51,10 +51,10 @@ public class ContraCheque {
     public ContraCheque() {
     }
 
-    public ContraCheque(Integer id, Integer funcionarioId, Double grossSalary, Double inss, Double irrf, Double valeTransporte, Double valeRefeicao, Double planoDeSaude, Double auxilioCreche, Double salarioLiquido, String dataReferencia) {
+    public ContraCheque(Integer id, Integer funcionarioId, Double salarioBruto, Double inss, Double irrf, Double valeTransporte, Double valeRefeicao, Double planoDeSaude, Double auxilioCreche, Double salarioLiquido, String dataReferencia) {
         this.id = id;
         this.funcionarioId = funcionarioId;
-        this.grossSalary = grossSalary;
+        this.salarioBruto = salarioBruto;
         this.inss = inss;
         this.irrf = irrf;
         this.valeTransporte = valeTransporte;
@@ -72,7 +72,7 @@ public class ContraCheque {
     //toString
     @Override
     public String toString() {
-        return "employee [id=" + id + ", funcionarioId=" + funcionarioId + ", grossSalary=" + grossSalary + ", inss=" + inss + ", irrf=" + irrf + ", valeTransporte=" + valeTransporte + ", valeRefeicao=" + valeRefeicao + ", planoDeSaude=" + planoDeSaude + ", auxilioCreche=" + auxilioCreche + ", salarioLiquido=" + salarioLiquido + ", dataReferencia=" + dataReferencia + "]";
+        return "employee [id=" + id + ", funcionarioId=" + funcionarioId + ", salarioBruto=" + salarioBruto + ", inss=" + inss + ", irrf=" + irrf + ", valeTransporte=" + valeTransporte + ", valeRefeicao=" + valeRefeicao + ", planoDeSaude=" + planoDeSaude + ", auxilioCreche=" + auxilioCreche + ", salarioLiquido=" + salarioLiquido + ", dataReferencia=" + dataReferencia + "]";
     }
 
 
@@ -87,8 +87,8 @@ public class ContraCheque {
         this.funcionarioId = funcionarioId;
     }
 
-    public void setGrossSalary(Double grossSalary) {
-        this.grossSalary = grossSalary;
+    public void setSalarioBruto(Double salarioBruto) {
+        this.salarioBruto = salarioBruto;
     }
 
     public void setInss(Double inss) {
@@ -131,8 +131,8 @@ public class ContraCheque {
         return funcionarioId;
     }
 
-    public Double getGrossSalary() {
-        return grossSalary;
+    public Double getSalarioBruto() {
+        return salarioBruto;
     }
 
     public Double getInss() {
