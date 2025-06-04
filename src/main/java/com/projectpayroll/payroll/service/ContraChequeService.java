@@ -33,6 +33,7 @@ public class ContraChequeService {
         this.entityManager = entityManager;
     }
 
+    @Transactional
     public void calcularSalarioLiquido(Integer funcionarioId) {
         Funcionarios funcionario = funcionarioRepository.findById(funcionarioId).orElseThrow(() -> new RuntimeException("Funcionário não encontrado")); // Tratar exceção adequadamente
 
