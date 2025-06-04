@@ -14,6 +14,8 @@ import com.projectpayroll.payroll.entity.ContraCheque;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.persistence.TypedQuery;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 @Service
 public class ContraChequeService {
@@ -61,9 +63,21 @@ public class ContraChequeService {
     }
 
     public void salvarContraCheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf) {
-        
-        
+        ContraCheque contraCheque = new ContraCheque();
+        contraCheque.setFuncionarioId(funcionarioId);
+        contraCheque.setSalarioBruto(salarioBruto);
+        contraCheque.setSalarioLiquido(salarioLiquido);
+        contraCheque.setInss(inss);
+        contraCheque.setIrrf(irrf);
+        contraCheque.setValeTransporte(calculadoraSalario.getValeTransporteDeFuncionario(funcionarioId));
+        contraCheque.setValeRefeicao(calculadoraSalario.getValeRefeicaoDeFuncionario(funcionarioId));
+        contraCheque.setPlanoDeSaude(calculadoraSalario.getPlanoDeSaudeDeFuncionario(funcionarioId));
+        contraCheque.setAuxilioCreche(calculadoraSalario.getAuxilioCrecheDeFuncionario(funcionarioId));
+        contraCheque.setDataReferencia(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        save(contraCheque);
     }
+
+
 
 
     // inject entity manager using constructor injection

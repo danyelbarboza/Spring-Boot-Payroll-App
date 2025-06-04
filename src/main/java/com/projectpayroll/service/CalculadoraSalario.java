@@ -1,9 +1,25 @@
 package com.projectpayroll.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.projectpayroll.payroll.dao.FuncionarioBeneficioRepository;
+import com.projectpayroll.payroll.dao.FuncionarioRepository;
+import com.projectpayroll.payroll.entity.Beneficios;
+import com.projectpayroll.payroll.entity.FuncionarioBeneficio;
 
 @Component
 public class CalculadoraSalario {
+
+    private FuncionarioRepository funcionarioRepository;
+    private FuncionarioBeneficioRepository funcionarioBeneficioRepository;
+
+    @Autowired
+    public CalculadoraSalario(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository) {
+        this.funcionarioRepository = funcionarioRepository;
+        this.funcionarioBeneficioRepository = funcionarioBeneficioRepository;
+    }
 
         // INSS
         // Faixa 1
@@ -106,6 +122,52 @@ public class CalculadoraSalario {
 
             return Math.round(irrfCalculado * 100.0) / 100.0;
         }
+
+        public double getValeTransporteDeFuncionario(Integer funcionarioId) {
+            List<FuncionarioBeneficio> beneficiosFuncionario = funcionarioBeneficioRepository.findByFuncionario_Id(funcionarioId);
+        for (FuncionarioBeneficio item : beneficiosFuncionario) {
+            if (item.getBeneficio().getName().equalsIgnoreCase("Vale-Transporte")) {
+                return item.getBeneficio().getDefaultValue();
+            }
+        }
+        return 0;
+    }
+
+
+
+
+
+
+        public double getValeRefeicaoDeFuncionario(Integer funcionarioId) {
+            List<FuncionarioBeneficio> beneficiosFuncionario = funcionarioBeneficioRepository.findByFuncionario_Id(funcionarioId);
+        for (FuncionarioBeneficio item : beneficiosFuncionario) {
+            if (item.getBeneficio().getName().equalsIgnoreCase("Vale-Refeicao")) {
+                return item.getBeneficio().getDefaultValue();
+            }
+        }
+        return 0;
+    }
+
+        public double getPlanoDeSaudeDeFuncionario(Integer funcionarioId) {
+            List<FuncionarioBeneficio> beneficiosFuncionario = funcionarioBeneficioRepository.findByFuncionario_Id(funcionarioId);
+        for (FuncionarioBeneficio item : beneficiosFuncionario) {
+            if (item.getBeneficio().getName().equalsIgnoreCase("Plano de Saude")) {
+                return item.getBeneficio().getDefaultValue();
+            }
+        }
+        return 0;
+    }
+
+        public double getAuxilioCrecheDeFuncionario(Integer funcionarioId) {
+            List<FuncionarioBeneficio> beneficiosFuncionario = funcionarioBeneficioRepository.findByFuncionario_Id(funcionarioId);
+        for (FuncionarioBeneficio item : beneficiosFuncionario) {
+            if (item.getBeneficio().getName().equalsIgnoreCase("Auxílio Creche")) {
+                return item.getBeneficio().getDefaultValue();
+            }
+        }
+        return 0;
+    }
+
     
     }
 
