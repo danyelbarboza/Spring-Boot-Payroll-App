@@ -33,7 +33,7 @@ public class ContraChequeService {
         this.entityManager = entityManager;
     }
 
-    public double calcularSalarioLiquido(Integer funcionarioId) {
+    public void calcularSalarioLiquido(Integer funcionarioId) {
         Funcionarios funcionario = funcionarioRepository.findById(funcionarioId).orElseThrow(() -> new RuntimeException("Funcionário não encontrado")); // Tratar exceção adequadamente
 
         double salarioBruto = funcionario.getGrossSalary();
@@ -58,8 +58,6 @@ public class ContraChequeService {
         double salarioLiquido = salarioBruto - inss - irrf - totalDescontosBeneficios + totalAcrescimosBeneficios;
 
         salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf);
-
-        return salarioLiquido;
     }
 
     public void salvarContraCheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf) {
