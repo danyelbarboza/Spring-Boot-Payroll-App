@@ -1,4 +1,4 @@
-package com.projectpayroll.service;
+package com.projectpayroll.payroll.service;
 
 import java.util.List;
 

@@ -1,9 +1,10 @@
-package com.projectpayroll.service;
+package com.projectpayroll.payroll.service;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.projectpayroll.payroll.dao.FuncionarioBeneficioRepository;
 import com.projectpayroll.payroll.dao.FuncionarioRepository;
@@ -12,7 +13,6 @@ import com.projectpayroll.payroll.entity.FuncionarioBeneficio;
 import com.projectpayroll.payroll.entity.Funcionarios;
 import com.projectpayroll.payroll.entity.ContraCheque;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import jakarta.persistence.TypedQuery;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -60,6 +60,7 @@ public class ContraChequeService {
         salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf);
     }
 
+    @Transactional
     public void salvarContraCheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf) {
         ContraCheque contraCheque = new ContraCheque();
         contraCheque.setFuncionarioId(funcionarioId);
@@ -77,12 +78,6 @@ public class ContraChequeService {
 
 
 
-
-    // inject entity manager using constructor injection
-    @Autowired
-    public ContraChequeService(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 
     // implement save method
     @Transactional
