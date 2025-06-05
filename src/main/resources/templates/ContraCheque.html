@@ -171,7 +171,7 @@
             <h2>Informações Gerais</h2>
             <div class="info-grid">
                 <div class="info-item"><strong>Período de Referência:</strong> <span th:text="${periodoReferencia}"></span></div>
-                <div class="info-item"><strong>Data de Pagamento:</strong> <span th:text="${dataPagamento}"></span></div>
+                <div class="info-item"><strong>Data de Pagamento:</strong> <span th:text="${periodoReferencia}"></span></div>
                 <div class="info-item"><strong>Filial:</strong> <span> Matriz</span></div>
             </div>
         </section>
@@ -183,7 +183,6 @@
                 <div class="info-item"><strong>Matrícula:</strong> <span> 0000</span></div>
                 <div class="info-item"><strong>CPF:</strong> <span th:text="${cpf}"></span></div>
                 <div class="info-item"><strong>Cargo:</strong> <span th:text="${cargo}"></span></div>
-                <div class="info-item"><strong>Departamento:</strong> <span th:text="${departamento}"></span></div>
                 <div class="info-item"><strong>Data de Admissão:</strong> <span> 01/01/2025</span></div>
                 <div class="info-item"><strong>Banco:</strong> <span>Banco Exemplo S.A.</span></div>
                 <div class="info-item"><strong>Agência:</strong> <span>0001</span></div>
@@ -302,7 +301,12 @@
             <h2>Bases de Cálculo</h2>
             <div class="info-grid">
                 <div class="info-item"><strong>Salário Base (CLT):</strong> <span th:text="${salarioBase}"></span></div>
-                <div class="info-item"><strong>Base INSS:</strong> <span th:text="${inssValor}"></span></div> <div class="info-item"><strong>Base FGTS:</strong> <span th:text="${baseFgts}"></span></div> <div class="info-item"><strong>FGTS do Mês:</strong> <span th:text="${fgtsMes}"></span></div> <div class="info-item"><strong>Base IRRF:</strong> <span th:text="${irrfValor}"></span></div> <div class="info-item"><strong>Faixa IRRF:</strong> <span th:text="${faixaIrrf}"></span></div> </div>
+                <div class="info-item"><strong>Base INSS:</strong> <span>12%</span></div> 
+                <div class="info-item"><strong>Base FGTS:</strong> <span>8%</span></div> 
+                <div class="info-item"><strong>FGTS do Mês:</strong> <span th:text="${fgtsMes}"></span></div> 
+                <div class="info-item"><strong>Base IRRF:</strong> <span>7.5%</span></div> 
+                <div class="info-item"><strong>Faixa IRRF:</strong> <span>7.5%</span></div> 
+            </div>
         </section>
 
         <section class="message-section">
@@ -312,7 +316,7 @@
         </section>
 
         <footer class="footer">
-            <p th:text="${dataPagamento}" class="text-center">Local e Data: Cidade Exemplo. </p>
+            <p th:text="${dataReferencia}" class="text-center">Local e Data: Cidade Exemplo. </p>
             <div class="signature-area">
                 <div class="signature-line">Assinatura do Empregador</div>
                 <div class="signature-line">Assinatura do Empregado</div>

@@ -1,5 +1,6 @@
 package com.projectpayroll.payroll.service;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.projectpayroll.payroll.entity.Beneficios;
 import com.projectpayroll.payroll.entity.ContraCheque;
 import com.projectpayroll.payroll.entity.FuncionarioBeneficio;
 import com.projectpayroll.payroll.entity.Funcionarios;
+import com.projectpayroll.payroll.service.GeradorPDFService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -29,11 +31,12 @@ public class ContraChequeService {
     private Model model;
 
     @Autowired
-    public ContraChequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager) {
+    public ContraChequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager, Model model) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioBeneficioRepository = funcionarioBeneficioRepository;
         this.calculadoraSalario = calculadoraSalario;
         this.entityManager = entityManager;
+        this.model = model;
     }
 
     @Transactional
@@ -70,6 +73,11 @@ public class ContraChequeService {
         double beneficiosCreditados = valeRefeicao + auxilioCreche;
         double descontosDebitados = inss + irrf + planoDeSaude + valeTransporte;
 
+        String nome = funcionario.getName();
+        String cpf = funcionario.getCpf();
+        String cargo = funcionario.getPosition();
+        double fgtsMes = salarioBruto * 0.08;
+
         // Dados do contracheque HTML
         model.addAttribute("Empresa", "Nome da Empresa"); 
         model.addAttribute("CNPJ", "00.000.000/0001-00");
@@ -85,6 +93,16 @@ public class ContraChequeService {
         model.addAttribute("auxilioCreche", auxilioCreche);
         model.addAttribute("beneficiosCreditados", beneficiosCreditados);
         model.addAttribute("descontosDebitados", descontosDebitados);
+        model.addAttribute("nomeFuncionario", nome);
+        model.addAttribute("cpf", cpf);
+        model.addAttribute("cargo", cargo);
+        model.addAttribute("fgtsMes", fgtsMes);
+
+        try {
+            GeradorPDFService.iniciarGeracaoPdf();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf, valeTransporte, valeRefeicao, planoDeSaude, auxilioCreche);
     }

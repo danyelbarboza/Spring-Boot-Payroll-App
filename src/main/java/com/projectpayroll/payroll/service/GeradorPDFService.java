@@ -16,23 +16,18 @@ import com.itextpdf.kernel.pdf.PdfWriter;
  */
 public class GeradorPDFService {
 
-    /**
-     * The path to the resulting PDF file.
-     */
+
+    // The path to the resulting PDF file.
     public static final String DEST = "./target/htmlsamples/ch01/ContraCheque.pdf";
 
-    /**
-     * The Base URI of the HTML page.
-     */
+    // The Base URI of the HTML page.
     public static final String BASEURI = "./src/main/resources/templates/";
 
-    /**
-     * The path to the source HTML file.
-     */
+    // The path to the source HTML file.
     public static final String SRC = String.format("%sContraCheque.html", BASEURI);
 
     /**
-     * The main method of this example.
+     * The main method.
      *
      * @param args no arguments are needed to run this example.
      * @throws IOException signals that an I/O exception has occurred.
