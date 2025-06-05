@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -162,29 +162,29 @@
     <div class="payslip-container">
         <header class="header">
             <h1>DEMONSTRATIVO DE PAGAMENTO</h1>
-            <p>Nome da Empresa Exemplo LTDA.</p>
-            <p>CNPJ: 00.000.000/0001-00</p>
-            <p>Endereço da Empresa, 123 - Cidade, Estado - CEP: 00000-000</p>
+            <p th:text="${Empresa}"></p>
+            <p th:text="${CNPJ}"></p>
+            <p th:text="${Endereço}"></p>
         </header>
 
         <section class="company-info">
             <h2>Informações Gerais</h2>
             <div class="info-grid">
-                <div class="info-item"><strong>Período de Referência:</strong> <span>Maio/2024</span></div>
-                <div class="info-item"><strong>Data de Pagamento:</strong> <span>05/06/2024</span></div>
-                <div class="info-item"><strong>Filial:</strong> <span>Matriz</span></div>
+                <div class="info-item"><strong>Período de Referência:</strong> <span th:text="${periodoReferencia}"></span></div>
+                <div class="info-item"><strong>Data de Pagamento:</strong> <span th:text="${dataPagamento}"></span></div>
+                <div class="info-item"><strong>Filial:</strong> <span> Matriz</span></div>
             </div>
         </section>
 
         <section class="employee-info">
             <h2>Dados do Funcionário</h2>
             <div class="info-grid">
-                <div class="info-item"><strong>Nome:</strong> <span>João da Silva Sauro</span></div>
-                <div class="info-item"><strong>Matrícula:</strong> <span>12345</span></div>
-                <div class="info-item"><strong>CPF:</strong> <span>123.456.789-00</span></div>
-                <div class="info-item"><strong>Cargo:</strong> <span>Desenvolvedor Pleno</span></div>
-                <div class="info-item"><strong>Departamento:</strong> <span>Tecnologia</span></div>
-                <div class="info-item"><strong>Data de Admissão:</strong> <span>01/01/2022</span></div>
+                <div class="info-item"><strong>Nome:</strong> <span th:text="${nomeFuncionario}"></span></div>
+                <div class="info-item"><strong>Matrícula:</strong> <span> 0000</span></div>
+                <div class="info-item"><strong>CPF:</strong> <span th:text="${cpf}"></span></div>
+                <div class="info-item"><strong>Cargo:</strong> <span th:text="${cargo}"></span></div>
+                <div class="info-item"><strong>Departamento:</strong> <span th:text="${departamento}"></span></div>
+                <div class="info-item"><strong>Data de Admissão:</strong> <span> 01/01/2025</span></div>
                 <div class="info-item"><strong>Banco:</strong> <span>Banco Exemplo S.A.</span></div>
                 <div class="info-item"><strong>Agência:</strong> <span>0001</span></div>
                 <div class="info-item"><strong>Conta Corrente:</strong> <span>12345-6</span></div>
@@ -206,19 +206,19 @@
                     <td>101</td>
                     <td>Salário Base</td>
                     <td>30 dias</td>
-                    <td class="text-right">5.000,00</td>
+                    <td class="text-right" th:text="${salarioBase}"></td>
                 </tr>
                 <tr>
                     <td>105</td>
                     <td>Horas Extras 50%</td>
                     <td>10 hrs</td>
-                    <td class="text-right">350,75</td>
+                    <td class="text-right">0,00</td>
                 </tr>
                 <tr>
                     <td>110</td>
                     <td>Adicional Noturno</td>
                     <td>-</td>
-                    <td class="text-right">150,00</td>
+                    <td class="text-right">0,00</td>
                 </tr>
                 </tbody>
         </table>
@@ -238,19 +238,13 @@
                     <td>301</td>
                     <td>Vale Refeição</td>
                     <td>22 dias</td>
-                    <td class="text-right">440,00</td>
+                    <td th:text="${valeRefeicao}" class="text-right"></td>
                 </tr>
                 <tr>
                     <td>302</td>
-                    <td>Vale Alimentação</td>
+                    <td>Auxilio Creche</td>
                     <td>Mês</td>
-                    <td class="text-right">300,00</td>
-                </tr>
-                <tr>
-                    <td>305</td>
-                    <td>Assistência Médica (Empresa)</td>
-                    <td>-</td>
-                    <td class="text-right">250,00</td> </tr>
+                    <td th:text="${auxilioCreche}" class="text-right"></td>
                 </tbody>
         </table>
 
@@ -268,27 +262,21 @@
                 <tr>
                     <td>201</td>
                     <td>INSS</td>
-                    <td>12%</td> <td class="text-right">600,00</td> </tr>
+                    <td>12%</td> <td th:text="${inssValor}" class="text-right"></td> </tr>
                 <tr>
                     <td>202</td>
                     <td>IRRF</td>
-                    <td>7.5%</td> <td class="text-right">250,00</td> </tr>
+                    <td>7.5%</td> <td th:text="${irrfValor}" class="text-right"></td> </tr>
                 <tr>
                     <td>205</td>
                     <td>Vale Transporte</td>
                     <td>6%</td>
-                    <td class="text-right">300,00</td> </tr>
+                    <td th:text="${valeTransporte}" class="text-right"></td> </tr>
                 <tr>
                     <td>208</td>
                     <td>Plano de Saúde (Funcionário)</td>
                     <td>-</td>
-                    <td class="text-right">180,50</td>
-                </tr>
-                 <tr>
-                    <td>210</td>
-                    <td>Vale Refeição (Participação Func.)</td>
-                    <td>-</td>
-                    <td class="text-right">44,00</td> </tr>
+                    <td th:text="${planoDeSaude}" class="text-right"></td>
                 </tbody>
         </table>
 
@@ -296,36 +284,35 @@
             <table>
                 <tr>
                     <td class="total-label">Total de Vencimentos:</td>
-                    <td class="text-right">5.500,75</td>
+                    <td class="text-right" th:text="${salarioBase}"></td>
                 </tr>
                 <tr>
                     <td class="total-label">Total de Benefícios (Creditados):</td>
-                    <td class="text-right">740,00</td> </tr>
+                    <td class="text-right" th:text="${beneficiosCreditados}"></td> </tr>
                 <tr>
                     <td class="total-label">Total de Descontos:</td>
-                    <td class="text-right">1.374,50</td> </tr>
+                    <td class="text-right" th:text="${descontosDebitados}"></td> </tr>
                 <tr>
                     <td class="total-label" style="font-size: 14px;">Valor Líquido a Receber:</td>
-                    <td class="text-right" style="font-weight: bold; font-size: 14px;">4.866,25</td> </tr>
+                    <td class="text-right" style="font-weight: bold; font-size: 14px;" th:text="${valorLiquido}"></td> </tr>
             </table>
         </section>
 
         <section class="employee-info" style="margin-top: 20px;">
             <h2>Bases de Cálculo</h2>
             <div class="info-grid">
-                <div class="info-item"><strong>Salário Base (CLT):</strong> <span>R$ 5.000,00</span></div>
-                <div class="info-item"><strong>Base INSS:</strong> <span>R$ 5.000,00</span></div> <div class="info-item"><strong>Base FGTS:</strong> <span>R$ 5.500,75</span></div> <div class="info-item"><strong>FGTS do Mês:</strong> <span>R$ 440,06</span></div> <div class="info-item"><strong>Base IRRF:</strong> <span>R$ 3.366,25</span></div> <div class="info-item"><strong>Faixa IRRF:</strong> <span>7.5%</span></div> </div>
+                <div class="info-item"><strong>Salário Base (CLT):</strong> <span th:text="${salarioBase}"></span></div>
+                <div class="info-item"><strong>Base INSS:</strong> <span th:text="${inssValor}"></span></div> <div class="info-item"><strong>Base FGTS:</strong> <span th:text="${baseFgts}"></span></div> <div class="info-item"><strong>FGTS do Mês:</strong> <span th:text="${fgtsMes}"></span></div> <div class="info-item"><strong>Base IRRF:</strong> <span th:text="${irrfValor}"></span></div> <div class="info-item"><strong>Faixa IRRF:</strong> <span th:text="${faixaIrrf}"></span></div> </div>
         </section>
 
         <section class="message-section">
             <strong>Mensagens:</strong>
             <p>- O pagamento do salário líquido será creditado na conta bancária informada.</p>
             <p>- Os valores referentes a Vale Refeição e Vale Alimentação são creditados em cartão benefício específico.</p>
-            <p>- Férias programadas para: 01/07/2024 a 30/07/2024.</p>
         </section>
 
         <footer class="footer">
-            <p class="text-center">Local e Data: Cidade Exemplo, 05 de Junho de 2024</p>
+            <p th:text="${dataPagamento}" class="text-center">Local e Data: Cidade Exemplo. </p>
             <div class="signature-area">
                 <div class="signature-line">Assinatura do Empregador</div>
                 <div class="signature-line">Assinatura do Empregado</div>

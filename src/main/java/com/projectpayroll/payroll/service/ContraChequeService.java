@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.projectpayroll.payroll.dao.FuncionarioBeneficioRepository;
 import com.projectpayroll.payroll.dao.FuncionarioRepository;
@@ -25,6 +26,7 @@ public class ContraChequeService {
     private FuncionarioBeneficioRepository funcionarioBeneficioRepository;
     private CalculadoraSalario calculadoraSalario;
     private EntityManager entityManager;
+    private Model model;
 
     @Autowired
     public ContraChequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager) {
@@ -43,6 +45,7 @@ public class ContraChequeService {
         double valeRefeicao = 0.0;
         double planoDeSaude = 0.0;
         double auxilioCreche = 0.0;
+        String dataReferencia = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 
         // Lógica para buscar FuncionarioBeneficio e somar/subtrair do salário
         List<FuncionarioBeneficio> beneficiosFuncionario = funcionarioBeneficioRepository.findByFuncionario_Id(funcionarioId);
@@ -63,6 +66,25 @@ public class ContraChequeService {
         double irrf = calculadoraSalario.calcularIRRF(salarioBruto, inss);
 
         double salarioLiquido = salarioBruto - inss - irrf - planoDeSaude - valeTransporte + valeRefeicao + auxilioCreche;
+
+        double beneficiosCreditados = valeRefeicao + auxilioCreche;
+        double descontosDebitados = inss + irrf + planoDeSaude + valeTransporte;
+
+        // Dados do contracheque HTML
+        model.addAttribute("Empresa", "Nome da Empresa"); 
+        model.addAttribute("CNPJ", "00.000.000/0001-00");
+        model.addAttribute("Endereço", "Endereço, 123 - Cidade, Estado - CEP: 00000-000");
+        model.addAttribute("periodoReferencia", dataReferencia); 
+        model.addAttribute("salarioBase", salarioBruto);
+        model.addAttribute("inssValor", inss);
+        model.addAttribute("irrfValor", irrf);
+        model.addAttribute("valorLiquido", salarioLiquido);
+        model.addAttribute("valeTransporte", valeTransporte);
+        model.addAttribute("valeRefeicao", valeRefeicao);
+        model.addAttribute("planoDeSaude", planoDeSaude);
+        model.addAttribute("auxilioCreche", auxilioCreche);
+        model.addAttribute("beneficiosCreditados", beneficiosCreditados);
+        model.addAttribute("descontosDebitados", descontosDebitados);
 
         salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf, valeTransporte, valeRefeicao, planoDeSaude, auxilioCreche);
     }
