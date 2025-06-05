@@ -1,7 +1,7 @@
 # Sistema de Folha de Pagamento com Spring Boot
 
 ## Descrição
-Este projeto é um Sistema de Folha de Pagamento (Payroll) desenvolvido em Java utilizando o framework Spring Boot. O sistema é capaz de calcular salários líquidos, aplicar descontos legais como INSS e IRRF, gerenciar benefícios e gerar holerites em PDF. Os dados são persistidos em um banco de dados MySQL através do Spring Data JPA, e as funcionalidades são expostas via uma API REST.
+Este projeto é um Sistema de Folha de Pagamento (Payroll) desenvolvido em Java utilizando o framework Spring Boot. O sistema é capaz de calcular salários líquidos, aplicar descontos legais como INSS e IRRF, gerenciar benefícios e gerar contracheques em PDF. Os dados são persistidos em um banco de dados MySQL através do Spring Data JPA, e as funcionalidades são expostas via uma API REST.
 
 ## Funcionalidades Principais
 
@@ -19,10 +19,10 @@ Este projeto é um Sistema de Folha de Pagamento (Payroll) desenvolvido em Java 
 * Gerencia benefícios associados ao funcionário, aplicando-os como descontos ou adicionais no cálculo.
 * Endpoints dedicados para acionar o cálculo da folha de pagamento para um funcionário específico ou para todos os funcionários cadastrados.
 
-### Geração de Holerite
-* Gera holerites em formato PDF automaticamente após o cálculo da folha de pagamento.
+### Geração de Contracheque
+* Gera contracheques em formato PDF automaticamente após o cálculo da folha de pagamento.
 * Os PDFs são gerados utilizando a biblioteca iText7 e templates Thymeleaf (`ContraCheque.html`), sendo salvos no diretório `./target/htmlsamples/ch01/` no servidor.
-* O holerite contém dados da empresa, do funcionário, salário bruto e líquido, detalhamento de proventos, descontos (INSS, IRRF, benefícios) e bases de cálculo (FGTS, etc.).
+* O contracheque contém dados da empresa, do funcionário, salário bruto e líquido, detalhamento de proventos, descontos (INSS, IRRF, benefícios) e bases de cálculo (FGTS, etc.).
 
 ### Persistência e API
 * Utiliza MySQL para armazenamento de dados com Spring Data JPA.
@@ -35,7 +35,7 @@ Este projeto é um Sistema de Folha de Pagamento (Payroll) desenvolvido em Java 
 * **Persistência:** Spring Data JPA (com Hibernate)
 * **Banco de Dados:** MySQL
 * **Geração de PDF:** iText7 (com `html2pdf` para conversão de HTML para PDF)
-* **Templating:** Thymeleaf (usado para o template do holerite em PDF)
+* **Templating:** Thymeleaf (usado para o template do contracheque em PDF)
 * **API:** Spring Web (REST Controllers) e Spring Data REST
 * **Documentação da API:** SpringDoc OpenAPI (Swagger UI)
 * **Validações:** Hibernate Validator
@@ -61,8 +61,8 @@ Este projeto é um Sistema de Folha de Pagamento (Payroll) desenvolvido em Java 
     * Servidor MySQL em execução.
 2.  **Clone o repositório:**
     ```bash
-    git clone <URL_DO_REPOSITORIO_DO_USUARIO>
-    cd spring-boot-payroll-app
+    git clone https://github.com/your-username/payroll.git
+    cd payroll
     ```
 3.  **Configure o Banco de Dados:**
     * Crie um banco de dados no MySQL chamado `empresa` (ou o nome que desejar, ajuste o `application.properties` se necessário).
@@ -127,9 +127,9 @@ Após iniciar a aplicação:
         * `GET /funcionario_beneficio`: Listar todas as associações.
         * `GET /funcionario_beneficio/search/findByFuncionario_Id?funcionarioId={id}`: Listar benefícios de um funcionário específico.
 
-    * **Calcular Folha de Pagamento e Gerar Holerite (via `FolhaPagamentoController`):**
-        * `POST /api/folha-pagamento/calcular/{funcionarioId}`: Calcula a folha de pagamento para um funcionário específico. O holerite em PDF será salvo no servidor.
-        * `POST /api/folha-pagamento/calcular`: Calcula a folha de pagamento para todos os funcionários. Os holerites em PDF serão salvos no servidor.
+    * **Calcular Folha de Pagamento e Gerar Contracheque (via `FolhaPagamentoController`):**
+        * `POST /api/folha-pagamento/calcular/{funcionarioId}`: Calcula a folha de pagamento para um funcionário específico. O contracheque em PDF será salvo no servidor.
+        * `POST /api/folha-pagamento/calcular`: Calcula a folha de pagamento para todos os funcionários. Os contracheques em PDF serão salvos no servidor.
 
     * **Gerenciar Contracheques (via `FolhaPagamentoController` e Spring Data REST):**
         * Controller (`/api/folha-pagamento/contracheques`):
@@ -153,14 +153,15 @@ curl -X POST -H "Content-Type: application/json" -d '{
   "position": "Analista de RH",
   "grossSalary": 4500.00
 }' http://localhost:8080/funcionarios
+```
 Listar funcionários:
 
-Bash
-
+```bash
 curl -X GET http://localhost:8080/funcionarios
+```
 Calcular folha de pagamento para o funcionário com ID 1:
 
-Bash
-
+```bash
 curl -X POST http://localhost:8080/api/folha-pagamento/calcular/1
-(Após este comando, o PDF do holerite será salvo em ./target/htmlsamples/ch01/)
+```
+(Após este comando, o PDF do contracheque será salvo em ./target/htmlsamples/ch01/)

@@ -24,9 +24,9 @@ import java.util.Map;
 @Service 
 public class GeradorPDFService {
 
-    public static String DEST = "./target/htmlsamples/ch01/ContraCheque";
+    public static String DEST = "./target/htmlsamples/ch01/Contracheque";
     public static String BASEURI = "./src/main/resources/templates/";
-    public static final String TEMPLATE_NAME = "ContraCheque";
+    public static final String TEMPLATE_NAME = "Contracheque";
 
     private final TemplateEngine templateEngine;
 
@@ -42,7 +42,7 @@ public class GeradorPDFService {
      * @param dados Mapa contendo as variáveis a serem usadas no template Thymeleaf.
      * @throws IOException Se ocorrer um erro de I/O durante a criação do PDF.
      */
-    public void gerarContraChequePdf(Map<String, Object> dados, String nome) throws IOException {
+    public void gerarContrachequePdf(Map<String, Object> dados, String nome) throws IOException {
         String DEST = GeradorPDFService.DEST + " de " + nome + " " + System.currentTimeMillis() + ".pdf";
         File file = new File(DEST);
         // Cria diretórios pais se não existirem
@@ -56,7 +56,7 @@ public class GeradorPDFService {
     /**
      * Cria o arquivo PDF processando um template Thymeleaf com os dados fornecidos.
      *
-     * @param templateName O nome do template Thymeleaf (ex: "ContraCheque").
+     * @param templateName O nome do template Thymeleaf (ex: "Contracheque").
      * @param dest         O caminho onde o PDF resultante será salvo.
      * @param dados        Um mapa com os dados para preencher o template.
      * @throws IOException Se ocorrer um erro de I/O.

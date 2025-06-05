@@ -10,21 +10,19 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import com.projectpayroll.payroll.dao.FuncionarioBeneficioRepository;
 import com.projectpayroll.payroll.dao.FuncionarioRepository;
 import com.projectpayroll.payroll.entity.Beneficios;
-import com.projectpayroll.payroll.entity.ContraCheque;
+import com.projectpayroll.payroll.entity.Contracheque;
 import com.projectpayroll.payroll.entity.FuncionarioBeneficio;
 import com.projectpayroll.payroll.entity.Funcionarios;
-import com.projectpayroll.payroll.service.GeradorPDFService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
 @Service
-public class ContraChequeService {
+public class ContrachequeService {
 
     private FuncionarioRepository funcionarioRepository;
     private FuncionarioBeneficioRepository funcionarioBeneficioRepository;
@@ -33,7 +31,7 @@ public class ContraChequeService {
     private GeradorPDFService geradorPDFService;
     
     @Autowired
-    public ContraChequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager, GeradorPDFService geradorPDFService) {
+    public ContrachequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager, GeradorPDFService geradorPDFService) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioBeneficioRepository = funcionarioBeneficioRepository;
         this.calculadoraSalario = calculadoraSalario;
@@ -82,11 +80,11 @@ public class ContraChequeService {
 
          // Criar um Map para passar os dados para o GeradorPDFService
         Map<String, Object> dadosParaPdf = new HashMap<>();
-        dadosParaPdf.put("Empresa", "Nome da Empresa Exemplo LTDA."); //
-        dadosParaPdf.put("CNPJ", "00.000.000/0001-00"); //
-        dadosParaPdf.put("Endereço", "Endereço da Empresa, 123 - Cidade, Estado - CEP: 00000-000"); //
-        dadosParaPdf.put("periodoReferencia", new SimpleDateFormat("MMMM/yyyy").format(new Date())); // Ex: "Maio/2024" //
-        dadosParaPdf.put("dataPagamento", new SimpleDateFormat("dd/MM/yyyy").format(new Date())); // Ex: "05/06/2024" //
+        dadosParaPdf.put("Empresa", "Nome da Empresa Exemplo LTDA."); 
+        dadosParaPdf.put("CNPJ", "00.000.000/0001-00"); 
+        dadosParaPdf.put("Endereço", "Endereço da Empresa, 123 - Cidade, Estado - CEP: 00000-000");
+        dadosParaPdf.put("periodoReferencia", new SimpleDateFormat("MMMM/yyyy").format(new Date())); 
+        dadosParaPdf.put("dataPagamento", new SimpleDateFormat("dd/MM/yyyy").format(new Date())); 
         dadosParaPdf.put("nomeFuncionario", nome);
         dadosParaPdf.put("cpf", cpf);
         dadosParaPdf.put("cargo", cargo);
@@ -103,28 +101,28 @@ public class ContraChequeService {
         dadosParaPdf.put("fgtsMes", String.format("%.2f", fgtsMes));
 
         try {
-            geradorPDFService.gerarContraChequePdf(dadosParaPdf, nome);
+            geradorPDFService.gerarContrachequePdf(dadosParaPdf, nome);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf, valeTransporte, valeRefeicao, planoDeSaude, auxilioCreche);
+        salvarContracheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf, valeTransporte, valeRefeicao, planoDeSaude, auxilioCreche);
     }
 
     @Transactional
-    public void salvarContraCheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf, double valeTransporte, double valeRefeicao, double planoDeSaude, double auxilioCreche) {
-        ContraCheque contraCheque = new ContraCheque();
-        contraCheque.setFuncionarioId(funcionarioId);
-        contraCheque.setSalarioBruto(salarioBruto);
-        contraCheque.setSalarioLiquido(salarioLiquido);
-        contraCheque.setInss(inss);
-        contraCheque.setIrrf(irrf);
-        contraCheque.setValeTransporte(valeTransporte);
-        contraCheque.setValeRefeicao(valeRefeicao);
-        contraCheque.setPlanoDeSaude(planoDeSaude);
-        contraCheque.setAuxilioCreche(auxilioCreche);
-        contraCheque.setDataReferencia(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-        save(contraCheque);
+    public void salvarContracheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf, double valeTransporte, double valeRefeicao, double planoDeSaude, double auxilioCreche) {
+        Contracheque contracheque = new Contracheque();
+        contracheque.setFuncionarioId(funcionarioId);
+        contracheque.setSalarioBruto(salarioBruto);
+        contracheque.setSalarioLiquido(salarioLiquido);
+        contracheque.setInss(inss);
+        contracheque.setIrrf(irrf);
+        contracheque.setValeTransporte(valeTransporte);
+        contracheque.setValeRefeicao(valeRefeicao);
+        contracheque.setPlanoDeSaude(planoDeSaude);
+        contracheque.setAuxilioCreche(auxilioCreche);
+        contracheque.setDataReferencia(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+        save(contracheque);
     }
 
 
@@ -141,40 +139,40 @@ public class ContraChequeService {
 
     // implement save method
     @Transactional
-    public void save(ContraCheque item) {
+    public void save(Contracheque item) {
         entityManager.persist(item);
     }
 
-    public ContraCheque findById(Integer id) {
-        return entityManager.find(ContraCheque.class, id);
+    public Contracheque findById(Integer id) {
+        return entityManager.find(Contracheque.class, id);
     }
 
-    public List<ContraCheque> findAll() {
+    public List<Contracheque> findAll() {
         // create a query. Explanation: TypedQuery is a type-safe query. It is a query that returns a specific type of object.
-        TypedQuery<ContraCheque> query = entityManager.createQuery("from ContraCheque Order By id_funcionario", ContraCheque.class);
+        TypedQuery<Contracheque> query = entityManager.createQuery("from Contracheque Order By id_funcionario", Contracheque.class);
         return query.getResultList();
     }
 
-    public List<ContraCheque> findByIdFuncionario(Integer idFuncionario) {
-        TypedQuery<ContraCheque> query = entityManager.createQuery("from ContraCheque where id_funcionario = :theData", ContraCheque.class);
+    public List<Contracheque> findByIdFuncionario(Integer idFuncionario) {
+        TypedQuery<Contracheque> query = entityManager.createQuery("from Contracheque where id_funcionario = :theData", Contracheque.class);
         query.setParameter("theData", idFuncionario);
         return query.getResultList();
     }
 
     @Transactional
-    public void update(ContraCheque item) {
+    public void update(Contracheque item) {
         entityManager.merge(item);
     }
 
     @Transactional
     public void delete(Integer id) {
-        ContraCheque item = findById(id);
+        Contracheque item = findById(id);
         entityManager.remove(item);
     }
 
     @Transactional
     public int deleteAll() {
-        int rowsDeleted = entityManager.createQuery("Delete from ContraCheque").executeUpdate();
+        int rowsDeleted = entityManager.createQuery("Delete from Contracheque").executeUpdate();
         return rowsDeleted;
     }
 

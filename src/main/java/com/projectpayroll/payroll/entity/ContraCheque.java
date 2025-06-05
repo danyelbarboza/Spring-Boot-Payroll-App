@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "contracheque")
-public class ContraCheque {
+public class Contracheque {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +48,10 @@ public class ContraCheque {
 
 
     //constructors
-    public ContraCheque() {
+    public Contracheque() {
     }
 
-    public ContraCheque(Integer id, Integer funcionarioId, Double salarioBruto, Double inss, Double irrf, Double valeTransporte, Double valeRefeicao, Double planoDeSaude, Double auxilioCreche, Double salarioLiquido, String dataReferencia) {
+    public Contracheque(Integer id, Integer funcionarioId, Double salarioBruto, Double inss, Double irrf, Double valeTransporte, Double valeRefeicao, Double planoDeSaude, Double auxilioCreche, Double salarioLiquido, String dataReferencia) {
         this.id = id;
         this.funcionarioId = funcionarioId;
         this.salarioBruto = salarioBruto;
