@@ -1,5 +1,7 @@
 package com.projectpayroll.payroll.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.projectpayroll.payroll.dao.FuncionarioBeneficioRepository;
 import com.projectpayroll.payroll.dao.FuncionarioRepository;
 import com.projectpayroll.payroll.entity.Beneficios;
+import com.projectpayroll.payroll.entity.ContraCheque;
 import com.projectpayroll.payroll.entity.FuncionarioBeneficio;
 import com.projectpayroll.payroll.entity.Funcionarios;
-import com.projectpayroll.payroll.entity.ContraCheque;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 @Service
 public class ContraChequeService {
@@ -38,43 +39,57 @@ public class ContraChequeService {
         Funcionarios funcionario = funcionarioRepository.findById(funcionarioId).orElseThrow(() -> new RuntimeException("Funcionário não encontrado")); // Tratar exceção adequadamente
 
         double salarioBruto = funcionario.getGrossSalary();
-        double totalDescontosBeneficios = 0.0;
-        double totalAcrescimosBeneficios = 0.0;
+        double valeTransporte = 0.0;
+        double valeRefeicao = 0.0;
+        double planoDeSaude = 0.0;
+        double auxilioCreche = 0.0;
 
         // Lógica para buscar FuncionarioBeneficio e somar/subtrair do salário
-        // Exemplo:
         List<FuncionarioBeneficio> beneficiosFuncionario = funcionarioBeneficioRepository.findByFuncionario_Id(funcionarioId);
         for (FuncionarioBeneficio item : beneficiosFuncionario) {
             Beneficios beneficio = item.getBeneficio();
-            if (beneficio.getIsDiscount()) {
-                totalDescontosBeneficios += beneficio.getDefaultValue();
-            } else {
-                totalAcrescimosBeneficios += beneficio.getDefaultValue();
+                if (beneficio.getName().equalsIgnoreCase("Plano de Saúde")) {
+                    planoDeSaude += beneficio.getDefaultValue();
+                } else if (beneficio.getName().equalsIgnoreCase("Vale-Transporte")) {
+                    valeTransporte += beneficio.getDefaultValue();
+                } else if (beneficio.getName().equalsIgnoreCase("Vale-Refeição")) {
+                    valeRefeicao += beneficio.getDefaultValue();
+                } else if (beneficio.getName().equalsIgnoreCase("Auxílio Creche")) {
+                    auxilioCreche += beneficio.getDefaultValue();
+                }
             }
-        }
 
         double inss = calculadoraSalario.calcularINSS(salarioBruto);
         double irrf = calculadoraSalario.calcularIRRF(salarioBruto, inss);
 
-        double salarioLiquido = salarioBruto - inss - irrf - totalDescontosBeneficios + totalAcrescimosBeneficios;
+        double salarioLiquido = salarioBruto - inss - irrf - planoDeSaude - valeTransporte + valeRefeicao + auxilioCreche;
 
-        salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf);
+        salvarContraCheque(funcionarioId, salarioBruto, salarioLiquido, inss, irrf, valeTransporte, valeRefeicao, planoDeSaude, auxilioCreche);
     }
 
     @Transactional
-    public void salvarContraCheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf) {
+    public void salvarContraCheque(Integer funcionarioId, double salarioBruto, double salarioLiquido, double inss, double irrf, double valeTransporte, double valeRefeicao, double planoDeSaude, double auxilioCreche) {
         ContraCheque contraCheque = new ContraCheque();
         contraCheque.setFuncionarioId(funcionarioId);
         contraCheque.setSalarioBruto(salarioBruto);
         contraCheque.setSalarioLiquido(salarioLiquido);
         contraCheque.setInss(inss);
         contraCheque.setIrrf(irrf);
-        contraCheque.setValeTransporte(calculadoraSalario.getValeTransporteDeFuncionario(funcionarioId));
-        contraCheque.setValeRefeicao(calculadoraSalario.getValeRefeicaoDeFuncionario(funcionarioId));
-        contraCheque.setPlanoDeSaude(calculadoraSalario.getPlanoDeSaudeDeFuncionario(funcionarioId));
-        contraCheque.setAuxilioCreche(calculadoraSalario.getAuxilioCrecheDeFuncionario(funcionarioId));
+        contraCheque.setValeTransporte(valeTransporte);
+        contraCheque.setValeRefeicao(valeRefeicao);
+        contraCheque.setPlanoDeSaude(planoDeSaude);
+        contraCheque.setAuxilioCreche(auxilioCreche);
         contraCheque.setDataReferencia(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         save(contraCheque);
+    }
+
+
+    @Transactional
+    public void calcularTodosSalariosLiquidos() {
+        List<Funcionarios> funcionarios = funcionarioRepository.findAll();
+        for (Funcionarios funcionario : funcionarios) {
+            calcularSalarioLiquido(funcionario.getId());
+        }
     }
 
 
