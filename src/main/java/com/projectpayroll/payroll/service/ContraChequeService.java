@@ -3,7 +3,9 @@ package com.projectpayroll.payroll.service;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,15 +30,15 @@ public class ContraChequeService {
     private FuncionarioBeneficioRepository funcionarioBeneficioRepository;
     private CalculadoraSalario calculadoraSalario;
     private EntityManager entityManager;
-    private Model model;
-
+    private GeradorPDFService geradorPDFService;
+    
     @Autowired
-    public ContraChequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager, Model model) {
+    public ContraChequeService(FuncionarioRepository funcionarioRepository, FuncionarioBeneficioRepository funcionarioBeneficioRepository, CalculadoraSalario calculadoraSalario, EntityManager entityManager, GeradorPDFService geradorPDFService) {
         this.funcionarioRepository = funcionarioRepository;
         this.funcionarioBeneficioRepository = funcionarioBeneficioRepository;
         this.calculadoraSalario = calculadoraSalario;
         this.entityManager = entityManager;
-        this.model = model;
+        this.geradorPDFService = geradorPDFService;
     }
 
     @Transactional
@@ -78,28 +80,30 @@ public class ContraChequeService {
         String cargo = funcionario.getPosition();
         double fgtsMes = salarioBruto * 0.08;
 
-        // Dados do contracheque HTML
-        model.addAttribute("Empresa", "Nome da Empresa"); 
-        model.addAttribute("CNPJ", "00.000.000/0001-00");
-        model.addAttribute("Endereço", "Endereço, 123 - Cidade, Estado - CEP: 00000-000");
-        model.addAttribute("periodoReferencia", dataReferencia); 
-        model.addAttribute("salarioBase", salarioBruto);
-        model.addAttribute("inssValor", inss);
-        model.addAttribute("irrfValor", irrf);
-        model.addAttribute("valorLiquido", salarioLiquido);
-        model.addAttribute("valeTransporte", valeTransporte);
-        model.addAttribute("valeRefeicao", valeRefeicao);
-        model.addAttribute("planoDeSaude", planoDeSaude);
-        model.addAttribute("auxilioCreche", auxilioCreche);
-        model.addAttribute("beneficiosCreditados", beneficiosCreditados);
-        model.addAttribute("descontosDebitados", descontosDebitados);
-        model.addAttribute("nomeFuncionario", nome);
-        model.addAttribute("cpf", cpf);
-        model.addAttribute("cargo", cargo);
-        model.addAttribute("fgtsMes", fgtsMes);
+         // Criar um Map para passar os dados para o GeradorPDFService
+        Map<String, Object> dadosParaPdf = new HashMap<>();
+        dadosParaPdf.put("Empresa", "Nome da Empresa Exemplo LTDA."); //
+        dadosParaPdf.put("CNPJ", "00.000.000/0001-00"); //
+        dadosParaPdf.put("Endereço", "Endereço da Empresa, 123 - Cidade, Estado - CEP: 00000-000"); //
+        dadosParaPdf.put("periodoReferencia", new SimpleDateFormat("MMMM/yyyy").format(new Date())); // Ex: "Maio/2024" //
+        dadosParaPdf.put("dataPagamento", new SimpleDateFormat("dd/MM/yyyy").format(new Date())); // Ex: "05/06/2024" //
+        dadosParaPdf.put("nomeFuncionario", nome);
+        dadosParaPdf.put("cpf", cpf);
+        dadosParaPdf.put("cargo", cargo);
+        dadosParaPdf.put("salarioBase", String.format("%.2f", salarioBruto));
+        dadosParaPdf.put("inssValor", String.format("%.2f", inss));
+        dadosParaPdf.put("irrfValor", String.format("%.2f", irrf));
+        dadosParaPdf.put("valorLiquido", String.format("%.2f", salarioLiquido));
+        dadosParaPdf.put("valeTransporte", String.format("%.2f", valeTransporte));
+        dadosParaPdf.put("valeRefeicao", String.format("%.2f", valeRefeicao));
+        dadosParaPdf.put("planoDeSaude", String.format("%.2f", planoDeSaude));
+        dadosParaPdf.put("auxilioCreche", String.format("%.2f", auxilioCreche));
+        dadosParaPdf.put("beneficiosCreditados", String.format("%.2f", beneficiosCreditados));
+        dadosParaPdf.put("descontosDebitados", String.format("%.2f", descontosDebitados));
+        dadosParaPdf.put("fgtsMes", String.format("%.2f", fgtsMes));
 
         try {
-            GeradorPDFService.iniciarGeracaoPdf();
+            geradorPDFService.gerarContraChequePdf(dadosParaPdf, nome);
         } catch (IOException e) {
             e.printStackTrace();
         }

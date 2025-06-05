@@ -143,7 +143,7 @@
 
         .footer .signature-line {
             border-top: 1px solid #555;
-            width: 250px; /* Largura da linha de assinatura */
+            width: 100%; /* Largura da linha de assinatura */
             text-align: center;
             padding-top: 5px;
         }
@@ -171,7 +171,7 @@
             <h2>Informações Gerais</h2>
             <div class="info-grid">
                 <div class="info-item"><strong>Período de Referência:</strong> <span th:text="${periodoReferencia}"></span></div>
-                <div class="info-item"><strong>Data de Pagamento:</strong> <span th:text="${periodoReferencia}"></span></div>
+                <div class="info-item"><strong>Data de Pagamento:</strong> <span th:text="${dataPagamento}"></span></div>
                 <div class="info-item"><strong>Filial:</strong> <span> Matriz</span></div>
             </div>
         </section>
