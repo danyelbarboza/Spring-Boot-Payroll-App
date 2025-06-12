@@ -1,167 +1,139 @@
 # Sistema de Folha de Pagamento com Spring Boot
 
 ## Descrição
-Este projeto é um Sistema de Folha de Pagamento (Payroll) desenvolvido em Java utilizando o framework Spring Boot. O sistema é capaz de calcular salários líquidos, aplicar descontos legais como INSS e IRRF, gerenciar benefícios e gerar contracheques em PDF. Os dados são persistidos em um banco de dados MySQL através do Spring Data JPA, e as funcionalidades são expostas via uma API REST.
+
+Este projeto é um **Sistema de Folha de Pagamento (Payroll)** desenvolvido em Java com o framework Spring Boot. O sistema realiza o cálculo de salários líquidos, aplicando os descontos legais de INSS e IRRF, gerencia benefícios dos funcionários e gera contracheques detalhados em formato PDF. Os dados são persistidos em um banco de dados MySQL com Spring Data JPA, e as funcionalidades são expostas através de uma API RESTful.
 
 ## Funcionalidades Principais
 
-### Gerenciamento de Funcionários
-* Permite adicionar, editar, excluir e listar funcionários via endpoints REST (expostos automaticamente pelo Spring Data REST em `/funcionarios`).
-* Campos obrigatórios para cadastro incluem Nome, CPF, Cargo e Salário Bruto, conforme definido na entidade `Funcionarios`.
+### Gerenciamento de Funcionários e Benefícios
 
-### Gerenciamento de Benefícios
-* Permite adicionar, editar, excluir e listar tipos de benefícios (ex: Vale-Transporte, Plano de Saúde) via endpoints REST (expostos automaticamente pelo Spring Data REST em `/beneficios`).
-* Permite associar benefícios específicos a funcionários via endpoints REST (expostos automaticamente pelo Spring Data REST em `/funcionario_beneficio`).
-* Benefícios podem ser configurados como descontos ou adicionais ao salário.
+  * **Funcionários**: Adição, edição, exclusão e listagem de funcionários através de endpoints REST expostos automaticamente pelo Spring Data REST (`/funcionarios`).
+  * **Benefícios**: Gerenciamento completo de tipos de benefícios (ex: Vale-Transporte, Plano de Saúde) via endpoints REST (`/beneficios`).
+  * **Associação**: Permite associar benefícios específicos a cada funcionário de forma flexível (`/funcionario_beneficio`).
 
-### Cálculo de Folha de Pagamento
-* Calcula o salário líquido considerando descontos de INSS (com alíquotas progressivas) e IRRF (com faixas de tributação), conforme implementado em `CalculadoraSalario.java`.
-* Gerencia benefícios associados ao funcionário, aplicando-os como descontos ou adicionais no cálculo.
-* Endpoints dedicados para acionar o cálculo da folha de pagamento para um funcionário específico ou para todos os funcionários cadastrados.
+### Cálculo Automatizado da Folha de Pagamento
 
-### Geração de Contracheque
-* Gera contracheques em formato PDF automaticamente após o cálculo da folha de pagamento.
-* Os PDFs são gerados utilizando a biblioteca iText7 e templates Thymeleaf (`ContraCheque.html`), sendo salvos no diretório `./target/htmlsamples/ch01/` no servidor.
-* O contracheque contém dados da empresa, do funcionário, salário bruto e líquido, detalhamento de proventos, descontos (INSS, IRRF, benefícios) e bases de cálculo (FGTS, etc.).
+  * **Cálculo Preciso**: O `CalculadoraSalario.java` calcula o salário líquido considerando as alíquotas progressivas de **INSS** e as faixas de tributação do **IRRF**, garantindo conformidade com a legislação.
+  * **Gestão de Benefícios**: Aplica os benefícios associados ao funcionário, tratando-os como proventos (ex: Auxílio Creche) ou descontos (ex: Plano de Saúde).
+  * **Endpoints Dedicados**:
+      * `POST /api/folha-pagamento/calcular/{funcionarioId}`: Calcula a folha para um funcionário específico.
+      * `POST /api/folha-pagamento/calcular`: Calcula a folha para todos os funcionários cadastrados.
 
-### Persistência e API
-* Utiliza MySQL para armazenamento de dados com Spring Data JPA.
-* Expõe as funcionalidades através de uma API REST para fácil integração e testes, utilizando Spring Web e Spring Data REST.
-* Permite gerenciar (`CRUD`) os contracheques gerados através de endpoints REST.
+### Geração de Contracheque em PDF
+
+  * **Geração Automática**: Após o cálculo da folha, um contracheque em **PDF** é gerado automaticamente.
+  * **Tecnologia**: Utiliza a biblioteca **iText7** e templates **Thymeleaf** (`ContraCheque.html`) para criar PDFs a partir de um modelo HTML dinâmico.
+  * **Armazenamento**: Os PDFs são salvos no diretório `./target/htmlsamples/ch01/` no servidor.
+  * **Detalhes do Contracheque**: Inclui dados da empresa, do funcionário, salário bruto e líquido, detalhamento de proventos e descontos, e bases de cálculo (FGTS, INSS, IRRF).
+
+### API REST e Persistência
+
+  * **Banco de Dados**: Utiliza **MySQL** para armazenamento de dados, gerenciado pelo Spring Data JPA.
+  * **API RESTful**: Expõe as funcionalidades através de uma API REST, utilizando Spring Web e Spring Data REST para um desenvolvimento rápido e padronizado.
+  * **Gerenciamento de Contracheques**: Permite listar e excluir os contracheques gerados via endpoints no `FolhaPagamentoController`.
 
 ## Tecnologias Utilizadas
-* **Linguagem:** Java (JDK 21)
-* **Framework:** Spring Boot
-* **Persistência:** Spring Data JPA (com Hibernate)
-* **Banco de Dados:** MySQL
-* **Geração de PDF:** iText7 (com `html2pdf` para conversão de HTML para PDF)
-* **Templating:** Thymeleaf (usado para o template do contracheque em PDF)
-* **API:** Spring Web (REST Controllers) e Spring Data REST
-* **Documentação da API:** SpringDoc OpenAPI (Swagger UI)
-* **Validações:** Hibernate Validator
-* **Build Tool:** Maven
 
-## Requisitos Técnicos
+  * **Linguagem**: **Java 21**
+  * **Framework**: **Spring Boot 3.3.0**
+  * **Persistência**: Spring Data JPA (com Hibernate)
+  * **Banco de Dados**: MySQL
+  * **Geração de PDF**: iText7 com `html2pdf`
+  * **Templating**: Thymeleaf (para o template do contracheque)
+  * **API**: Spring Web (REST Controllers) e Spring Data REST
+  * **Documentação da API**: SpringDoc OpenAPI (Swagger UI)
+  * **Validações**: Hibernate Validator
+  * **Build Tool**: Maven
+  * **Testes**: JUnit 5, Mockito e H2 (banco de dados em memória)
 
-### Dependências Principais (conforme `pom.xml`)
-* `spring-boot-starter-data-jpa`
-* `spring-boot-starter-web`
-* `spring-boot-starter-data-rest`
-* `spring-boot-starter-thymeleaf`
-* `mysql-connector-j`
-* `itext7-core`, `layout`, `html2pdf` (para geração de PDF)
-* `springdoc-openapi-starter-webmvc-ui` (para documentação da API com Swagger)
-* `hibernate-validator` (para validações)
-* `spring-boot-devtools` (opcional, para desenvolvimento)
+## Como Executar o Projeto
 
-### Instalação
-1.  **Pré-requisitos:**
-    * Java JDK 21 ou superior instalado.
-    * Maven instalado.
-    * Servidor MySQL em execução.
-2.  **Clone o repositório:**
+### Pré-requisitos
+
+  * Java JDK 21 ou superior.
+  * Maven 3.9 ou superior.
+  * Servidor MySQL em execução.
+
+### Passos para Instalação
+
+1.  **Clone o repositório:**
+
     ```bash
-    git clone https://github.com/your-username/payroll.git
-    cd payroll
+    git clone https://github.com/danyelbarboza/Spring-Boot-Payroll-App.git
+    cd seu-repositorio
     ```
-3.  **Configure o Banco de Dados:**
-    * Crie um banco de dados no MySQL chamado `empresa` (ou o nome que desejar, ajuste o `application.properties` se necessário).
-    * Atualize as credenciais do banco de dados no arquivo `src/main/resources/application.properties`:
+
+2.  **Configure o Banco de Dados:**
+
+      * Crie um banco de dados no MySQL com o nome `empresa`.
+      * Atualize as credenciais do banco de dados no arquivo `src/main/resources/application.properties`:
         ```properties
-        spring.datasource.url=jdbc:mysql://localhost:3306/empresa # Atualize se necessário
+        spring.datasource.url=jdbc:mysql://localhost:3306/empresa
         spring.datasource.username=seu_usuario_mysql
         spring.datasource.password=sua_senha_mysql
         ```
-4.  **Execute a aplicação:**
+
+3.  **Execute a aplicação:**
+
     ```bash
     mvn spring-boot:run
     ```
-    Ou execute a classe principal `PayrollApplication.java` a partir da sua IDE.
 
-## Como Utilizar
+    Ou execute a classe `PayrollApplication.java` a partir da sua IDE.
 
-Após iniciar a aplicação:
+## Como Utilizar a API
 
-1.  **Acessar a Documentação da API (Swagger UI):**
-    * Abra seu navegador e acesse: `http://localhost:8080/ui.html`
-2.  **Interagir com os Endpoints:**
-    Utilize os endpoints da API (disponíveis na documentação do Swagger UI) para:
+Após iniciar a aplicação, acesse a documentação interativa da API (Swagger UI) para testar os endpoints:
 
-    * **Gerenciar Funcionários (via Spring Data REST em `/funcionarios`):**
-        * `POST /funcionarios`: Cadastrar um novo funcionário.
-            * Exemplo de corpo da requisição:
-                ```json
-                {
-                  "name": "João da Silva",
-                  "cpf": "123.456.789-00",
-                  "position": "Desenvolvedor Backend",
-                  "grossSalary": 5000.00
-                }
-                ```
-        * `GET /funcionarios`: Listar todos os funcionários.
-        * `GET /funcionarios/{id}`: Buscar funcionário por ID.
-        * `PUT /funcionarios/{id}`: Atualizar um funcionário.
-        * `DELETE /funcionarios/{id}`: Excluir um funcionário.
+  * **URL do Swagger UI**: [http://localhost:8080/ui.html](http://localhost:8080/ui.html)
 
-    * **Gerenciar Tipos de Benefícios (via Spring Data REST em `/beneficios`):**
-        * `POST /beneficios`: Cadastrar um novo tipo de benefício.
-            * Exemplo de corpo da requisição:
-                ```json
-                {
-                  "name": "Vale-Transporte",
-                  "defaultValue": 150.00,
-                  "isDiscount": true
-                }
-                ```
-        * `GET /beneficios`: Listar todos os tipos de benefícios.
+### Exemplos de Requisições com cURL
 
-    * **Associar Benefícios a Funcionários (via Spring Data REST em `/funcionario_beneficio`):**
-        * `POST /funcionario_beneficio`: Associar um benefício a um funcionário.
-            * Exemplo de corpo da requisição (usando URIs para as entidades relacionadas):
-                ```json
-                {
-                  "funcionario": "/funcionarios/1", // URI do funcionário
-                  "beneficio": "/beneficios/1"    // URI do tipo de benefício
-                }
-                ```
-        * `GET /funcionario_beneficio`: Listar todas as associações.
-        * `GET /funcionario_beneficio/search/findByFuncionario_Id?funcionarioId={id}`: Listar benefícios de um funcionário específico.
+#### 1\. Cadastrar um Funcionário
 
-    * **Calcular Folha de Pagamento e Gerar Contracheque (via `FolhaPagamentoController`):**
-        * `POST /api/folha-pagamento/calcular/{funcionarioId}`: Calcula a folha de pagamento para um funcionário específico. O contracheque em PDF será salvo no servidor.
-        * `POST /api/folha-pagamento/calcular`: Calcula a folha de pagamento para todos os funcionários. Os contracheques em PDF serão salvos no servidor.
-
-    * **Gerenciar Contracheques (via `FolhaPagamentoController` e Spring Data REST):**
-        * Controller (`/api/folha-pagamento/contracheques`):
-            * `GET /api/folha-pagamento/contracheques`: Listar todos os contracheques salvos.
-            * `GET /api/folha-pagamento/contracheques/{id}`: Buscar contracheque por seu ID.
-            * `GET /api/folha-pagamento/contracheques/funcionario/{funcionarioId}`: Listar contracheques de um funcionário específico (Observação: o endpoint real no código é `/contracheques/{funcionarioId}`, este precisa ser verificado ou ajustado no controller se o mapeamento `funcionario/{funcionarioId}` for desejado. O código atual do `FolhaPagamentoController` usa `@GetMapping("/contracheques/{funcionarioId}")` mas este parece ser para buscar *contracheques* e não uma lista por ID de funcionário. O método `getContrachequesByFuncionarioId` está correto.
-            * `DELETE /api/folha-pagamento/contracheques/{id}`: Excluir um contracheque.
-            * `DELETE /api/folha-pagamento/contracheques`: Excluir todos os contracheques.
-        * Spring Data REST (`/contracheques`):
-            * Endpoints CRUD para a entidade `ContraCheque` também são expostos aqui.
-
-## Exemplo de Interação (Conforme Repositórios REST Expostos)
-
-### Terminal (usando cURL ou similar)
-
-**Adicionar um funcionário:**
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{
-  "name": "Maria Souza",
-  "cpf": "987.654.321-99",
-  "position": "Analista de RH",
-  "grossSalary": 4500.00
+  "name": "João da Silva",
+  "cpf": "123.456.789-00",
+  "position": "Desenvolvedor Backend",
+  "grossSalary": 5000.00
 }' http://localhost:8080/funcionarios
 ```
-Listar funcionários:
+
+#### 2\. Cadastrar um Tipo de Benefício
 
 ```bash
-curl -X GET http://localhost:8080/funcionarios
+curl -X POST -H "Content-Type: application/json" -d '{
+  "name": "Plano de Saúde",
+  "defaultValue": 250.00,
+  "isDiscount": true
+}' http://localhost:8080/beneficios
 ```
-Calcular folha de pagamento para o funcionário com ID 1:
+
+#### 3\. Associar um Benefício a um Funcionário
+
+*Primeiro, obtenha a URI do funcionário (ex: `/funcionarios/1`) e do benefício (ex: `/beneficios/1`).*
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{
+  "funcionario": "http://localhost:8080/funcionarios/1",
+  "beneficio": "http://localhost:8080/beneficios/1"
+}' http://localhost:8080/funcionario_beneficio
+```
+
+#### 4\. Calcular a Folha de Pagamento e Gerar o Contracheque
+
+*Para o funcionário com ID 1:*
 
 ```bash
 curl -X POST http://localhost:8080/api/folha-pagamento/calcular/1
 ```
-(Após este comando, o PDF do contracheque será salvo em ./target/htmlsamples/ch01/)
+
+Após a execução, o PDF do contracheque será salvo no diretório `./target/htmlsamples/ch01/`.
+
+#### 5\. Listar Contracheques de um Funcionário
+
+```bash
+curl -X GET http://localhost:8080/api/folha-pagamento/contracheques/1
+```
