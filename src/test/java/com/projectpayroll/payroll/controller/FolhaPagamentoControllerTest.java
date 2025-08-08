@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.projectpayroll.payroll.service.ContrachequeService;
 
-@WebMvcTest(FolhaPagamentoController.class) // Foca o teste apenas neste controller
+@WebMvcTest(FolhaPagamentoController.class)
 class FolhaPagamentoControllerTest {
 
     @Autowired
@@ -27,7 +27,7 @@ class FolhaPagamentoControllerTest {
         doNothing().when(contrachequeService).calcularSalarioLiquido(1);
 
         mockMvc.perform(post("/api/folha-pagamento/calcular/{funcionarioId}", 1))
-                .andExpect(status().isOk()) // Espera que o status da resposta seja 200 (OK)
+                .andExpect(status().isOk())
                 .andExpect(content().string("Folha de pagamento calculada e salva para o funcionário ID: 1"));
     }
 
